@@ -54,8 +54,13 @@ see http://yann.lecun.com/exdb/mnist/
  ```
                  cd feature\ extraction
                  python3 minst_alexnet.py --dataFolder /temp/mnist_png
+``` 
+#### 2- feature extraction with VGG:
+ ```
+                 cd feature\ extraction
+                 python3 minst_vgg.py --dataFolder /temp/mnist_png
 ```
- #### 1- fine tuning with alexNet:
+ #### 3- fine tuning with alexNet:
 ```
                  cd  fine\ tuning
                  python3 minstDataset+AlexNet.py --dataFolder /temp/mnist_png
