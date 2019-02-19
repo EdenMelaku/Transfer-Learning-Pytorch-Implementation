@@ -55,7 +55,7 @@ import time
 
 print("PyTorch Version: ", torch.__version__)
 print("Torchvision Version: ", torchvision.__version__)
-
+global input_size
 
 
 ######################################################################
