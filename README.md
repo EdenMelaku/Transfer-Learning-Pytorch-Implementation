@@ -46,7 +46,7 @@ see http://yann.lecun.com/exdb/mnist/
    
  3- **Extract dataset**:
  ```
-   curl https://raw.githubusercontent.com/EdenMelaku/Transfer-Learning-Pytorch-Implmentation/master/mnist_png.tar.gz | xzC /temp
+curl https://raw.githubusercontent.com/EdenMelaku/Transfer-Learning-Pytorch-Implmentation/master/mnist_png.tar.gz | tar xzC /temp
  ```
    
  ### 4- Running examples
