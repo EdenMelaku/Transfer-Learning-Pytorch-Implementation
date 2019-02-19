@@ -144,8 +144,8 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
                 #saving the model
 
                 cwd = os.getcwd()
-                dir1 = cwd+"/model.pth"
-                dir2 = cwd+"optimizer.pth"
+                dir1 = cwd+"/modelAlexnet.pth"
+                dir2 = cwd+"/optimizerAlexnet.pth"
                 torch.save(model.state_dict(), dir1)
                 torch.save(optimizer.state_dict(), dir2)
 
