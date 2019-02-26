@@ -49,7 +49,7 @@ see http://yann.lecun.com/exdb/mnist/
 curl https://raw.githubusercontent.com/EdenMelaku/Transfer-Learning-Pytorch-Implmentation/master/mnist_png.tar.gz | tar xzC /temp
  ```
    
- ### 4- Running examples
+ ### 4- Training with pretrained models 
  #### 1- feature extraction with alexNet:
  ```
                  cd feature\ extraction
@@ -66,8 +66,11 @@ curl https://raw.githubusercontent.com/EdenMelaku/Transfer-Learning-Pytorch-Impl
                  python3 minstDataset+AlexNet.py --dataFolder /temp/mnist_png
               
 ```
-                  
-   ## References
+ ## Running inference
+ 
+ 
+ 
+ ## References
    1-https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html
    
    2- https://ruder.io/transfer-learning/
