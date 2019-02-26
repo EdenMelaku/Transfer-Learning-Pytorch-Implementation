@@ -35,7 +35,7 @@ The MNIST dataset is one of the most common datasets used for image classificati
 The MNIST database contains 60,000 training images and 10,000 testing images taken from American Census Bureau employees and American high school students
 see http://yann.lecun.com/exdb/mnist/
 
-## Quick start 
+## Quick start For Training
  
  1- **install python3** 
  
@@ -68,7 +68,24 @@ curl https://raw.githubusercontent.com/EdenMelaku/Transfer-Learning-Pytorch-Impl
 ```
  ## Running inference
  
+ you can run examples to test your trained model. you can either run testing.py (takes image and checkpoint path as an argument and predict number) or you can run demo_server.py to launch a flask server and takes base64 encoded image and sends predicted number back to the client. you can check my other repository https://github.com/EdenMelaku/minstAndroidDemo it has client side android implmentation for this project. 
  
+ if you haven't trained a model. you can download and use my model ...
+ ```
+ curl https://doc-0g-1o-docs.googleusercontent.com/docs/securesc/usnus0qm8arnkgli0kgnss8m1j9mdqcb/28ma8ier12pd2297c8rbd9p79vq87e7f/1551182400000/01693330806149924406/01693330806149924406/1uxdJON0MWQmJBTficbJieCSs4GqDzrHO?e=download&nonce=5ng79ccnfh33u&user=01693330806149924406&hash=dk4kufrkkn2koo89s0f5n3ej3kp9cjpf              
+```
+Running example
+```
+                 cd  feature\ extraction
+                 python3 testing.py --checkpoint /modelAlexNet.pth  --image photo.jpeg 
+              
+```
+launching demo server 
+```
+                 cd  feature\ extraction
+                 python3 demo_server.py --checkpoint /modelAlexNet.pth 
+              
+```
  
  ## References
    1-https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html
