@@ -1,4 +1,5 @@
 import argparse
+import cv2
 
 import torch
 import torch.nn as nn
@@ -123,23 +124,32 @@ if __name__=="__main__":
     })}
     tn = transforms.Compose([
         transforms.Resize(224),
+        transforms.Grayscale(num_output_channels=3),
 transforms.CenterCrop(224),        transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
     ])
     # Create training and validation datasets
-    pat = "/home/eden/Pictures/mod/zero.png"
-    image=Image.open(pat)
+    pat = "/home/eden/Pictures/mod/4.jpg"
+    image = cv2.imread(pat)
+    im = cv2.resize(image, (28, 28))
+    i = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
+    LOW = np.array([0, 0, 0])
+    UP = np.array([255, 150, 150])
+    mask = cv2.inRange(i, LOW, UP)
+    cv2.imwrite(pat,mask)
 
+    image= Image.open(pat)
     im=tn(image)
     imm=im.unsqueeze(0)
     inp=Image.open('/home/eden/Pictures/mod/zero.png')
    # inputs = input.to(device)
     transform=transforms.Compose(data_transforms)
 #    inn=transform(inp)
-    outputs=net(im)
+    outputs=net(imm)
     #outputs=net(process_image(pat))
     _, preds = torch.max(outputs, 1)
     print(preds)
+    print(preds.item())
 
 
 
