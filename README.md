@@ -45,7 +45,7 @@ see [mnist dataset ](http://yann.lecun.com/exdb/mnist/)
   pip install -r requirements.txt
   ```
    
- 3- **Extract dataset**:
+ 3- **Download and Extract dataset**:
  ```
 curl https://raw.githubusercontent.com/EdenMelaku/Transfer-Learning-Pytorch-Implmentation/master/mnist_png.tar.gz | tar xzC /temp
  ```
