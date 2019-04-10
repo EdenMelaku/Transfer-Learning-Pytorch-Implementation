@@ -1,18 +1,14 @@
-#!/usr/bin/env python3.5
-import base64
+import argparse
 
 import cv2
 import numpy as np
 import torch
 import torch.nn as nn
 from PIL import Image
-from flask import Flask, request, make_response
-from torchvision import transforms
-
-app = Flask(__name__)
+from torchvision.transforms import transforms
 
 num_classes = 10
-
+#alexNet neuralnetwork class
 
 class AlexNet(nn.Module):
 
@@ -52,31 +48,23 @@ class AlexNet(nn.Module):
         return x
 
 
-@app.route('/')
-def index():
-    print("got request ")
-    a = request.args.get('image')
-
-    # image_data = request.REQUEST["image_data"].decode("base64") # The data image
-#    print(a)
-    print()
-    c = a.strip()
- #   print(base64.urlsafe_b64decode(c))
-    with open('number.jpeg', "wb") as f:
-        f.write(base64.urlsafe_b64decode(a))
-
-    response = make_response()
-    response.content_type = 'text'
 
 
-    fh = open("saved.jpeg", "wb")
-    fh.write(base64.urlsafe_b64decode(a))
-    fh.close()
 
-    PATH = "/home/eden/newMODEL/modelAlexNet.pth"
-    device = torch.device("cpu")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--checkpoint', required=True, help='Full path to model checkpoint')
+    parser.add_argument('--image', required=True, help='Full path to image for inference')
+    args = parser.parse_args()
+    #setting the parameters for image location and model checkpoint path
+
+    PATH =args.checkpoint
+    impath=args.image
+    #set device gpu or cpu
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     net = AlexNet()
+    #loading model
     print("loading model")
     print(net.classifier)
     net.load_state_dict(torch.load(PATH, map_location='cpu'))
@@ -84,6 +72,9 @@ def index():
     net.eval()  # Set model to evaluate mode
     print("model set to eval mode")
 
+
+
+    input_size = 224
 
     data_transforms = {transforms.Compose({
         transforms.Resize(224),
@@ -99,49 +90,31 @@ def index():
         transforms.CenterCrop(224), transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
     ])
-    pat = "saved.jpeg"
-    image = cv2.imread(pat)
-    im = cv2.resize(image, (28, 28))
-    i = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
+    # preparing data for inference
+    pat = "pic.jpeg"
+    image = cv2.imread(impath)
+    im = cv2.resize(image, (28, 28))# converts to 28 by 28 image like mnist
+    i = cv2.cvtColor(im, cv2.COLOR_BGR2HSV) #convert to hsv
     LOW = np.array([0, 0, 0])
     UP = np.array([255, 150, 150])
-    mask = cv2.inRange(i, LOW, UP)
+    mask = cv2.inRange(i, LOW, UP)#masking the image to identify the written number
     cv2.imwrite(pat, mask)
 
     image = Image.open(pat)
     im = tn(image)
-    imm = im.unsqueeze(0)
-    inp = Image.open(pat)
+    imm = im.unsqueeze(0) #adding 1 more channel
+    #inp = Image.open(pat)
 
-    transform = transforms.Compose(data_transforms)
-
+    #transform = transforms.Compose(data_transforms)
     outputs = net(imm)
-    # outputs=net(process_image(pat))
     _, preds = torch.max(outputs, 1)
+    print(preds)
     print(preds.item())
-    response = str(preds.item())
 
 
-
-    sm = torch.nn.Softmax()
-    probablities = sm(outputs)
-    n = probablities.detach().numpy()
-    result = [x * 100 for x in n]
-    print(probablities.detach().numpy())
-
-    m = n * 100
-    from itertools import chain
-    a = list(chain.from_iterable(m))
-    print("\n")
-
-    i = 0
-    for x in a:
-        print("probablity of  " + str(i) + "====" + str(x))
-        i += 1
+    classfic= preds.data[0][0]
+    index=int(classfic)
+    names = net.classes
+    print(names[index])
 
 
-    return response
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')

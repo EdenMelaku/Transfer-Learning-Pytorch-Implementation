@@ -1,14 +1,17 @@
 import argparse
-
 import cv2
-import numpy as np
+
 import torch
 import torch.nn as nn
 from PIL import Image
+import numpy as np
+
+from torchvision import datasets
 from torchvision.transforms import transforms
 
-num_classes = 10
-#alexNet neuralnetwork class
+num_classes=10
+
+
 
 class AlexNet(nn.Module):
 
@@ -47,24 +50,46 @@ class AlexNet(nn.Module):
         x = self.classifier(x)
         return x
 
+def process_image(image_path):
+    ''' Scales, crops, and normalizes a PIL image for a PyTorch model,
+        returns an Numpy array
+    '''
+
+    # Process a PIL image for use in a PyTorch model
+    size = 256, 256
+    crop_size = 224
+
+    im = Image.open(image_path)
+
+    im.thumbnail(size)
+
+    left = (size[0] - crop_size) / 2
+    top = (size[1] - crop_size) / 2
+    right = (left + crop_size)
+    bottom = (top + crop_size)
+
+    im = im.crop((left, top, right, bottom))
+
+    np_image = np.array(im)
+    np_image = np_image / 255
+
+    means = [0.485, 0.456, 0.406]
+    stds = [0.229, 0.224, 0.225]
+
+    np_image =(np.array(np_image) - means) /stds
+
+    pytorch_np_image = np_image.transpose(2, 0, 1)
 
 
+    return pytorch_np_image
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--checkpoint', required=True, help='Full path to model checkpoint')
-    parser.add_argument('--image', required=True, help='Full path to image for inference')
-    args = parser.parse_args()
-    #setting the parameters for image location and model checkpoint path
-    
-    PATH =args.checkpoint
-    impath=args.image
-    #set device gpu or cpu
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+if __name__=="__main__":
 
-    net = AlexNet()
-    #loading model
+    PATH="/home/eden/newMODEL/modelAlexNet.pth"
+    device = torch.device("cpu")
+
+    net=AlexNet()
     print("loading model")
     print(net.classifier)
     net.load_state_dict(torch.load(PATH, map_location='cpu'))
@@ -72,42 +97,73 @@ if __name__ == "__main__":
     net.eval()  # Set model to evaluate mode
     print("model set to eval mode")
 
-   
+    #model = AlexNet()
+    #optimizer= torch.optim.SGD (model.parameters(), lr=0.001, momentum=0.9)
 
-    input_size = 224
+    #checkpoint = torch.load(PATH)
+    #model.load_state_dict(checkpoint['model_state_dict'])
+    #optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    #epoch = checkpoint['epoch']
+   # loss = checkpoint['loss']
+
+    #model.eval()
+
+
+
+    input_size=224
 
     data_transforms = {transforms.Compose({
         transforms.Resize(224),
 
         transforms.CenterCrop(224),
 
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+
+
+        transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225]),
         transforms.ToTensor()
     })}
     tn = transforms.Compose([
         transforms.Resize(224),
         transforms.Grayscale(num_output_channels=3),
-        transforms.CenterCrop(224), transforms.ToTensor(),
+transforms.CenterCrop(224),        transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
     ])
-    # preparing data for inference
-    pat = "pic.jpeg"
-    image = cv2.imread(impath)
-    im = cv2.resize(image, (28, 28))# converts to 28 by 28 image like mnist
-    i = cv2.cvtColor(im, cv2.COLOR_BGR2HSV) #convert to hsv 
+    # Create training and validation datasets
+    pat = "num.jpg"
+    image = cv2.imread(pat)
+    im = cv2.resize(image, (28, 28))
+    i = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
     LOW = np.array([0, 0, 0])
     UP = np.array([255, 150, 150])
-    mask = cv2.inRange(i, LOW, UP)#masking the image to identify the written number
-    cv2.imwrite(pat, mask)
+    mask = cv2.inRange(i, LOW, UP)
+    cv2.imwrite(pat,mask)
 
-    image = Image.open(pat)
-    im = tn(image)
-    imm = im.unsqueeze(0) #adding 1 more channel 
-    #inp = Image.open(pat)
-    
-    #transform = transforms.Compose(data_transforms)
-    outputs = net(imm)
+    image= Image.open(pat)
+    im=tn(image)
+    imm=im.unsqueeze(0)
+    inp=Image.open(pat)
+   # inputs = input.to(device)
+    transform=transforms.Compose(data_transforms)
+#    inn=transform(inp)
+    outputs=net(imm)
+    #outputs=net(process_image(pat))
     _, preds = torch.max(outputs, 1)
     print(preds)
     print(preds.item())
 
+
+    sm = torch.nn.Softmax()
+    probablities = sm(outputs)
+    n=probablities.detach().numpy()
+    result=[x *100 for x in n ]
+    print(probablities.detach().numpy())
+
+    m=n*100
+    from itertools import chain
+    a=list(chain.from_iterable(m))
+    print("\n")
+
+    i = 0
+    for x in a:
+        print("probablity of  " + str(i) + "====" + str(x))
+        i += 1

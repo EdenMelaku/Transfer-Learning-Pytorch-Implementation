@@ -1,5 +1,4 @@
 # based on the tutorial on  https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html
-# minst dataset feature extraction with VGG
 
 
 ######################################################################
@@ -102,16 +101,22 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
         for phase in ['training', 'testing']:
             if phase == 'training':
                 model.train()  # Set model to training mode
+                print("model set to training mode")
             else:
                 model.eval()  # Set model to evaluate mode
-
+                print("model set to eval mode")
             running_loss = 0.0
             running_corrects = 0
 
             # Iterate over data.
+            print("iterating over data started ")
+            i=0
+            start = time.clock()
             for inputs, labels in dataloaders[phase]:
                 inputs = inputs.to(device)
                 labels = labels.to(device)
+                print("data "+str(i))
+                i+=1
 
                 # zero the parameter gradients
                 optimizer.zero_grad()
@@ -119,6 +124,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
                 # forward
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'training'):
+                    print("inside training phase")
                     # Get model outputs and calculate loss
                     # Special case for inception because in training it has an auxiliary output. In train
                     #   mode we calculate the loss by summing the final output and the auxiliary output
@@ -145,11 +151,9 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
                 running_corrects += torch.sum(preds == labels.data)
                 #saving the model
 
-                cwd = os.getcwd()
-                dir1 = cwd+"/modelVGG.pth"
-                dir2 = cwd+"/optimizerVGG.pth"
-                torch.save(model.state_dict(), dir1)
-                torch.save(optimizer.state_dict(), dir2)
+
+                end=time.clock()
+                print ("one data took "+str(end - start))
 
 
 
@@ -157,7 +161,11 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
             epoch_acc = running_corrects.double() / len(dataloaders[phase].dataset)
 
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
-
+            cwd = os.getcwd()
+            dir1 = cwd + "/modelAlexNet.pth"
+            dir2 = cwd + "/optimizerAlexNet.pth"
+            torch.save(model.state_dict(), dir1)
+            torch.save(optimizer.state_dict(), dir2)
             # deep copy the model
             if phase == 'testing' and epoch_acc > best_acc:
                 best_acc = epoch_acc
@@ -169,6 +177,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
+    file.write('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
     print('Best val Acc: {:4f}'.format(best_acc))
 
     # load best model weights
@@ -480,6 +489,11 @@ if __name__ == "__main__":
     #   when True we only update the reshaped layer params
     feature_extract = True
 
+
+
+
+
+
     # Initialize the model for this run
     global input_size
     variable_init_Time=time.clock();
@@ -605,7 +619,7 @@ if __name__ == "__main__":
     train_end = time.clock()
     sec = (train_end - train_start) / 100
     min = sec / 60
-    file.write("time elapsed for training  = " + sec + " seconds-------- or ------- " + min + "   minutes")
+
     print(" model saved on current working directory ")
 
     ######################################################################
