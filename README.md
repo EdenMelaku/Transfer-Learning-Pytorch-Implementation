@@ -89,12 +89,12 @@ launching demo server
 ```
  
  ## References
-   1-https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html
+   1-[transfer learning tutorial on pytorch]https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html
    
-   2- https://ruder.io/transfer-learning/
+   2- [transfer learning tutorial]https://ruder.io/transfer-learning/
    
-   3-https://medium.com/@sidereal/cnns-architectures-lenet-alexnet-vgg-googlenet-resnet-and-more-666091488df5
+   3- [implemnted CNN overview]https://medium.com/@sidereal/cnns-architectures-lenet-alexnet-vgg-googlenet-resnet-and-more-666091488df5
    
-   4-http://cs231n.github.io/transfer-learning/
+   4- [transfer learning tutorial on github]http://cs231n.github.io/transfer-learning/
       
 
