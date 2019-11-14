@@ -109,7 +109,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
             running_corrects = 0
 
             # Iterate over data.
-            print("iterating over data started ")
+            #print("iterating over data started ")
             i=0
             start = time.clock()
             for inputs, labels in dataloaders[phase]:
@@ -124,7 +124,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
                 # forward
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'training'):
-                    print("inside training phase")
+                    #print("inside training phase")
                     # Get model outputs and calculate loss
                     # Special case for inception because in training it has an auxiliary output. In train
                     #   mode we calculate the loss by summing the final output and the auxiliary output
@@ -153,7 +153,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
 
 
                 end=time.clock()
-                print ("one data took "+str(end - start))
+                #print ("one data took "+str(end - start))
 
 
 
