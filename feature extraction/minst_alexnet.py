@@ -552,7 +552,7 @@ if __name__ == "__main__":
     file.write("time elapsed for data initializaton = " + str(sec) + " seconds-------- or ------- " + str(min) + "   minutes")
     # Detect if we have a GPU available
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print("device  "+ device)
+    print("device  "+ str(device))
     ######################################################################
     # Create the Optimizer
     # --------------------
