@@ -87,6 +87,8 @@ launching demo server
                  python3 demo_server.py --checkpoint /modelAlexNet.pth 
               
 ```
+
+### after training your model you can use my other implementation [android client app] (https://github.com/EdenMelaku/minstAndroidDemo)
  
  ## References
    1-[transfer learning tutorial on pytorch](https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html)
