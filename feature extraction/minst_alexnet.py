@@ -467,6 +467,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataFolder', required=True, help='Full path to model checkpoint')
     args = parser.parse_args()
+    parser.add_argument('--numberOfClasses', required=True, help='please insert number of classes')
 
 
     # Top level data directory. Here we assume the format of the directory conforms
@@ -477,7 +478,7 @@ if __name__ == "__main__":
     model_name = "alexnet"
 
     # Number of classes in the dataset
-    num_classes = 10
+    num_classes = args.numberOfClasses
 
     # Batch size for training (change depending on how much memory you have)
     batch_size = 8
@@ -621,41 +622,3 @@ if __name__ == "__main__":
     min = sec / 60
 
     print(" model saved on current working directory ")
-
-    ######################################################################
-    # Comparison with Model Trained from Scratch
-    # ------------------------------------------
-    #
-    # Just for fun, lets see how the model learns if we do not use transfer
-    # learning. The performance of finetuning vs. feature extracting depends
-    # largely on the dataset but in general both transfer learning methods
-    # produce favorable results in terms of training time and overall accuracy
-    # versus a model trained from scratch.
-    #
-
-    # Initialize the non-pretrained version of the model used for this run
-    scratch_model, _ = initialize_model(model_name, num_classes, feature_extract=False, use_pretrained=False)
-    scratch_model = scratch_model.to(device)
-    scratch_optimizer = optim.SGD(scratch_model.parameters(), lr=0.001, momentum=0.9)
-    scratch_criterion = nn.CrossEntropyLoss()
-    _, scratch_hist = train_model(scratch_model, dataloaders_dict, scratch_criterion, scratch_optimizer,
-                                  num_epochs=num_epochs, is_inception=(model_name == "inception"))
-
-    # Plot the training curves of validation accuracy vs. number
-    #  of training epochs for the transfer learning method and
-    #  the model trained from scratch
-    ohist = []
-    shist = []
-
-    ohist = [h.cpu().numpy() for h in hist]
-    shist = [h.cpu().numpy() for h in scratch_hist]
-
-    plt.title("Validation Accuracy vs. Number of Training Epochs")
-    plt.xlabel("Training Epochs")
-    plt.ylabel("Validation Accuracy")
-    plt.plot(range(1, num_epochs + 1), ohist, label="Pretrained")
-    plt.plot(range(1, num_epochs + 1), shist, label="Scratch")
-    plt.ylim((0, 1.))
-    plt.xticks(np.arange(1, num_epochs + 1, 1.0))
-    plt.legend()
-    plt.show()
