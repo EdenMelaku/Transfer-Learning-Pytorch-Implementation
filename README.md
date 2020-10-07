@@ -44,41 +44,22 @@ see [mnist dataset ](http://yann.lecun.com/exdb/mnist/)
   ```
   pip install -r requirements.txt
   ```
-   
- 3- **Download and Extract dataset**:
- ```
-curl https://raw.githubusercontent.com/EdenMelaku/Transfer-Learning-Pytorch-Implmentation/master/mnist_png.tar.gz | tar xzC /temp
- ```
-   
- ### 4- Training with pretrained models 
+
+ ###  Training with pretrained models 
  #### 1- feature extraction with alexNet:
  ```
                  cd feature\ extraction
-                 python3 minst_alexnet.py --dataFolder /temp/mnist_png
+                 python3 minst_alexnet.py --dataFolder /temp/mnist_png --numberOfClasses 26
 ``` 
-#### 2- feature extraction with VGG:
- ```
-                 cd feature\ extraction
-                 python3 minst_vgg.py --dataFolder /temp/mnist_png
-```
- #### 3- fine tuning with alexNet:
-```
-                 cd  fine\ tuning
-                 python3 minstDataset+AlexNet.py --dataFolder /temp/mnist_png
-              
-```
+
  ## Running inference
  
  you can run examples to test your trained model. you can either run testing.py (takes image and checkpoint path as an argument and predict number) or you can run demo_server.py to launch a flask server and takes base64 encoded image and sends predicted number back to the client. you can check my other repository [my github repository for client side android app](https://github.com/EdenMelaku/minstAndroidDemo) it has client side android implmentation for this project. 
  
- if you haven't trained a model. you can download and use my model ...
- ```
- curl https://doc-0g-1o-docs.googleusercontent.com/docs/securesc/usnus0qm8arnkgli0kgnss8m1j9mdqcb/28ma8ier12pd2297c8rbd9p79vq87e7f/1551182400000/01693330806149924406/01693330806149924406/1uxdJON0MWQmJBTficbJieCSs4GqDzrHO?e=download&nonce=5ng79ccnfh33u&user=01693330806149924406&hash=dk4kufrkkn2koo89s0f5n3ej3kp9cjpf              
-```
 Running example
 ```
                  cd  feature\ extraction
-                 python3 testing.py --checkpoint /modelAlexNet.pth  --image photo.jpeg 
+                 python3 testing.py --checkpoint /modelAlexNet.pth  --image photo.jpeg --numberOfClasses 26
               
 ```
 launching demo server 
