@@ -466,8 +466,9 @@ if __name__ == "__main__":
     file.write("programm started running at ---- "+str(now.hour)+": "+str(now.minute)+": "+str(now.hour) )
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataFolder', required=True, help='Full path to model checkpoint')
-    args = parser.parse_args()
     parser.add_argument('--numberOfClasses', required=True, help='please insert number of classes')
+
+    args = parser.parse_args()
 
 
     # Top level data directory. Here we assume the format of the directory conforms

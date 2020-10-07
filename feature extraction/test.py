@@ -55,6 +55,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--checkpoint', required=True, help='Full path to model checkpoint')
     parser.add_argument('--image', required=True, help='Full path to image for inference')
+    parser.add_argument('--numberOfClasses', required=True, help='please enter number of classes')
     args = parser.parse_args()
     #setting the parameters for image location and model checkpoint path
 
