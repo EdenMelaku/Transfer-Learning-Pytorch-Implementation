@@ -479,7 +479,7 @@ if __name__ == "__main__":
     model_name = "alexnet"
 
     # Number of classes in the dataset
-    num_classes = args.numberOfClasses
+    num_classes =int(args.numberOfClasses)
 
     # Batch size for training (change depending on how much memory you have)
     batch_size = 8
