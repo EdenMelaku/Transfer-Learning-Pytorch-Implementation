@@ -476,7 +476,7 @@ if __name__ == "__main__":
     data_dir = args.dataFolder
 
     # Models to choose from [resnet, alexnet, vgg, squeezenet, densenet, inception]
-    model_name = "alexnet"
+    model_name = "resnet"
 
     # Number of classes in the dataset
     num_classes =int(args.numberOfClasses)
