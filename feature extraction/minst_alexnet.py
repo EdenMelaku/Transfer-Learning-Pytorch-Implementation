@@ -634,7 +634,7 @@ if __name__ == "__main__":
     #
 
     # Initialize the non-pretrained version of the model used for this run
-    scratch_model, _ = initialize_model(model_name, num_classes, feature_extract=False, use_pretrained=False)
+    '''scratch_model, _ = initialize_model(model_name, num_classes, feature_extract=False, use_pretrained=False)
     scratch_model = scratch_model.to(device)
     scratch_optimizer = optim.SGD(scratch_model.parameters(), lr=0.001, momentum=0.9)
     scratch_criterion = nn.CrossEntropyLoss()
@@ -658,4 +658,4 @@ if __name__ == "__main__":
     plt.ylim((0, 1.))
     plt.xticks(np.arange(1, num_epochs + 1, 1.0))
     plt.legend()
-    plt.show()
+    plt.show()'''
